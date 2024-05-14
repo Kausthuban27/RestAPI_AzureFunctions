@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using User_Validation.Interface;
-using User_Validation.Model;
-using User_Validation.ViewModel;
+using RestAPI_AzureFunctions.Interface;
+using RestAPI_AzureFunctions.Model;
+using RestAPI_AzureFunctions.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace User_Validation.Service
+namespace RestAPI_AzureFunctions.Service
 {
     public class UserService : IUser
     {

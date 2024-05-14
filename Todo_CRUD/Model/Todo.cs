@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RestAPI_AzureFunctions.Model
+namespace Todo_CRUD.Model
 {
     public partial class Todo
     {

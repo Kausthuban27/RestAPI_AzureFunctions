@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RestAPI_AzureFunctions.ViewModel
+namespace Todo_CRUD.ViewModel
 {
     public class UserData
     {

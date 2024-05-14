@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RestAPI_AzureFunctions.Model;
+namespace Todo_CRUD.Model;
 
 public partial class User
 {

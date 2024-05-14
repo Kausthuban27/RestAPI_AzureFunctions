@@ -1,7 +1,7 @@
-﻿using RestAPI_AzureFunctions.Model;
-using RestAPI_AzureFunctions.ViewModel;
+﻿using Todo_CRUD.Model;
+using Todo_CRUD.ViewModel;
 
-namespace RestAPI_AzureFunctions.Interface
+namespace Todo_CRUD.Interface
 {
     public interface ITodo
     {

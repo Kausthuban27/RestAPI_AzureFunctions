@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using User_Validation.Model;
-using User_Validation.ViewModel;
+using RestAPI_AzureFunctions.Model;
+using RestAPI_AzureFunctions.ViewModel;
 using System.Net;
 
-namespace User_Validation.Interface
+namespace RestAPI_AzureFunctions.Interface
 {
     public interface IUser
     {

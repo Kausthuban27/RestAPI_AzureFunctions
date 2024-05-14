@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 
-namespace RestAPI_AzureFunctions.ViewModel
+namespace Todo_CRUD.ViewModel
 {
     public class TodoData
     {

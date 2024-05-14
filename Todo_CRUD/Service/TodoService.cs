@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using RestAPI_AzureFunctions.Interface;
-using RestAPI_AzureFunctions.Model;
-using RestAPI_AzureFunctions.ViewModel;
+using Todo_CRUD.Interface;
+using Todo_CRUD.Model;
+using Todo_CRUD.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestAPI_AzureFunctions.Service
+namespace Todo_CRUD.Service
 {
     public class TodoService : ITodo
     {

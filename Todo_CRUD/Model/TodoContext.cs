@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace RestAPI_AzureFunctions.Model;
+namespace Todo_CRUD.Model;
 
 public partial class TodoContext : DbContext
 {
