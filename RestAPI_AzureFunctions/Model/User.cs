@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RestAPI_AzureFunctions.Model;
+namespace User_Validation.Model;
 
 public partial class User
 {
