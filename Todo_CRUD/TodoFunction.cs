@@ -73,5 +73,50 @@ namespace Todo_CRUD
             response.WriteString(taskAdded.ToString());
             return response;
         }
+
+        [Function("UpdateTasks")]
+        [OpenApiOperation(operationId: "UpdateTasks", tags: new[] {"UpdateTodoTasks"}, Summary = "Update the user tasks", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiRequestBody(contentType: "application/json", bodyType:typeof(Todo), Required = true)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Task Updated Successfully")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
+        public async Task<HttpResponseData> UpdateTodoTasks([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req)
+        {
+            var requestBody = await req.ReadFromJsonAsync<Todo>();
+            if(requestBody == null)
+            {
+                _logger.LogError("Request Body is null");
+                return req.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            var (statusCode, isUpdated) = await _todoEntity.UpdateTodoTasks(requestBody);
+            _todoEntity.SaveChanges();
+
+            var response = req.CreateResponse(statusCode);
+            response.WriteString(isUpdated);
+            return response;
+        }
+
+        [Function("DeleteTask")]
+        [OpenApiOperation(operationId: "DeleteTask", tags: new[] {"DeleteTodos"}, Summary = "Delete the Todo Tasks", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Task Deleted Successfully")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
+        public async Task<HttpResponseData> DeleteTodoTasks([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+        {
+            string username = req.Query["username"]!;
+            if(username == null)
+            {
+                _logger.LogError("Username is null");
+                return req.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            var (statusCode, isDeleted) = await _todoEntity.DeleteTodoTasks(username);
+            _todoEntity.SaveChanges();
+
+            var response = req.CreateResponse(statusCode);
+            response.WriteString(isDeleted);
+            return response;
+
+        }
     }
 }

@@ -9,8 +9,8 @@ namespace Todo_CRUD.Interface
     {
         Task<(HttpStatusCode statusCode, string)> AddTodoTasks(TodoData todos);
         Task<List<string>> GetTodoTasks(string username);
-        bool UpdateTodoTasks(Todo todos);
-        bool DeleteTodoTasks(string username);
+        Task<(HttpStatusCode statusCode, string)> UpdateTodoTasks(Todo todos);
+        Task<(HttpStatusCode statusCode, string)> DeleteTodoTasks(string username);
         void SaveChanges();
     }
 }

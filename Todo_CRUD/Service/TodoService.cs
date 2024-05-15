@@ -42,9 +42,18 @@ namespace Todo_CRUD.Service
             return (HttpStatusCode.BadRequest, "Failed To Add Tasks");
         }
 
-        public bool DeleteTodoTasks(string username)
+        public async Task<(HttpStatusCode statusCode, string)> DeleteTodoTasks(string username)
         {
-            throw new NotImplementedException();
+            var taskToRemove = await _todoContext.Todos.Where(u => u.Username == username && u.IsDone).ToListAsync();
+            if(taskToRemove.Any())
+            {
+                _todoContext.Todos.RemoveRange(taskToRemove);
+                return (HttpStatusCode.OK, "Task Deleted Successfully");
+            }
+            else
+            {
+                return (HttpStatusCode.BadRequest, "Tasks are Not Completed");
+            }
         }
 
         public async Task<List<string>> GetTodoTasks(string username)
@@ -65,9 +74,22 @@ namespace Todo_CRUD.Service
             _todoContext.SaveChanges();
         }
 
-        public bool UpdateTodoTasks(Todo todos)
+        public async Task<(HttpStatusCode statusCode, string)> UpdateTodoTasks(Todo todos)
         {
-            throw new NotImplementedException();
+            if(todos == null)
+            {
+                return (HttpStatusCode.BadRequest, "No Tasks Found");
+            }
+            else
+            {
+                var task = await _todoContext.Todos.FirstOrDefaultAsync(t => t.TaskName == todos.TaskName);
+                if(task == null)
+                {
+                    return (HttpStatusCode.BadRequest, "No user exist");
+                }
+                task.IsDone = todos.IsDone;
+                return (HttpStatusCode.OK, "Updated Successfully");
+            }
         }
     }
 }
