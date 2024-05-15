@@ -8,7 +8,7 @@ namespace Todo_CRUD.Helper
     {
         public Mapper()
         {
-            CreateMap<UserData, User>();
+            CreateMap<TodoData, Todo>();
         }
     }
 }

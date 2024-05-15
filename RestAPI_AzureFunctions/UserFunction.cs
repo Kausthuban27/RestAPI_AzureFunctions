@@ -59,21 +59,14 @@ namespace RestAPI_AzureFunctions
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            var requestBody = await req.ReadAsStringAsync();
+            var requestBody = await req.ReadFromJsonAsync<UserData>();
             if (requestBody == null)
             {
                 _logger.LogError("Request body is null");
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            var userData = JsonConvert.DeserializeObject<UserData>(requestBody);
-            if (userData == null)
-            {
-                _logger.LogError("Deserialized user data is null");
-                return req.CreateResponse(HttpStatusCode.BadRequest);
-            }
-
-            var (statusCode, userAdded) = await _userEntity.AddUsers(userData);
+            var (statusCode, userAdded) = await _userEntity.AddUsers(requestBody);
             _userEntity.SaveChanges();
 
             var response = req.CreateResponse(statusCode);

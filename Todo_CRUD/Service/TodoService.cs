@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace Todo_CRUD.Service
 {
@@ -20,9 +23,23 @@ namespace Todo_CRUD.Service
             _todoMapper = mapper;
         }
 
-        public bool AddTodoTasks(TodoData todos)
+        public async Task<(HttpStatusCode statusCode, string)> AddTodoTasks(TodoData todos)
         {
-            throw new NotImplementedException();
+            var todoTasks = _todoMapper.Map<Todo>(todos);
+            if(todos != null)
+            {
+                var newTask = await _todoContext.Todos.Where(t => t.TaskName == todos.TaskName).ToListAsync();
+                if(newTask == null || !newTask.Any())
+                {
+                    _todoContext.Todos.Add(todoTasks);
+                    return (HttpStatusCode.OK, "Tasks Added Successfully");
+                }
+                else
+                {
+                    return (HttpStatusCode.BadRequest, "Tasks Already Exist");
+                }
+            }
+            return (HttpStatusCode.BadRequest, "Failed To Add Tasks");
         }
 
         public bool DeleteTodoTasks(string username)
@@ -30,9 +47,17 @@ namespace Todo_CRUD.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Todo> GetTodoTasks(string username)
+        public async Task<List<string>> GetTodoTasks(string username)
         {
-            throw new NotImplementedException();
+            var tasks = await _todoContext.Todos.Where(u => u.Username == username).ToListAsync();
+            if(tasks != null)
+            {
+                return tasks.Select(task => task.TaskName).ToList(); ; 
+            }
+            else
+            {
+                return new List<string>();
+            }
         }
 
         public void SaveChanges()
