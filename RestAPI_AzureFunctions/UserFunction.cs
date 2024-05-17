@@ -29,13 +29,13 @@ namespace RestAPI_AzureFunctions
         }
 
         [Function("GetUser")]
-        [OpenApiOperation(operationId: "LoginUser", tags: new[] { "User Login" }, Summary = "Gets the User", Visibility = OpenApiVisibilityType.Important)]
+        [OpenApiOperation(operationId: "LoginUser", Summary = "Gets the User", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "password", In = ParameterLocation.Query, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "User Do Exist")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(bool), Description = "User Doesn't Exist")]
 
-        public async Task<HttpResponseData> LoginUser([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        public async Task<HttpResponseData> LoginUser([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -55,7 +55,7 @@ namespace RestAPI_AzureFunctions
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(bool), Description = "User Added Successfully")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(bool), Description = "Invalid Details")]
 
-        public async Task<HttpResponseData> RegisterUser([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
+        public async Task<HttpResponseData> RegisterUser([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 

@@ -29,27 +29,24 @@ namespace Todo_CRUD
         [Function("GetUserTasks")]
         [OpenApiOperation(operationId: "UserTasks", tags: new[] { "Get tasks" }, Summary = "Gets the user tasks", Visibility = OpenApiVisibilityType.Important)]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<string>), Description = "Tasks Successfully Fetched")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Todo), Description = "Tasks Successfully Fetched")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(StatusCodes), Description = "Tasks Not successfull")]
-        public async Task<HttpResponseData> GetUserTasks([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+        public async Task<IEnumerable<Todo>> GetUserTasks([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             string username = req.Query["username"]!;
             if (string.IsNullOrEmpty(username))
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest);
+                return [];
             }
 
             var todoTaskNames = await _todoEntity.GetTodoTasks(username);
-            if (!todoTaskNames.Any())
+            if (todoTaskNames == null)
             {
-                return req.CreateResponse(HttpStatusCode.BadRequest);
+                return [];
             }
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            var json = JsonConvert.SerializeObject(todoTaskNames);
-            response.WriteString(json);
-            return response;
+            return todoTaskNames;
         }
 
         [Function("AddTasks")]
@@ -57,7 +54,7 @@ namespace Todo_CRUD
         [OpenApiRequestBody(contentType: "application/json", bodyType: typeof(TodoData), Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Task Added Successfully")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
-        public async Task<HttpResponseData> AddTodoTasks([HttpTrigger(AuthorizationLevel.Function, "post")]  HttpRequestData req)
+        public async Task<HttpResponseData> AddTodoTasks([HttpTrigger(AuthorizationLevel.Anonymous, "post")]  HttpRequestData req)
         {
             var requestBody = await req.ReadFromJsonAsync<TodoData>();
             if (requestBody == null)
@@ -79,7 +76,7 @@ namespace Todo_CRUD
         [OpenApiRequestBody(contentType: "application/json", bodyType:typeof(Todo), Required = true)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Task Updated Successfully")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
-        public async Task<HttpResponseData> UpdateTodoTasks([HttpTrigger(AuthorizationLevel.Function, "put")] HttpRequestData req)
+        public async Task<HttpResponseData> UpdateTodoTasks([HttpTrigger(AuthorizationLevel.Anonymous, "put")] HttpRequestData req)
         {
             var requestBody = await req.ReadFromJsonAsync<Todo>();
             if(requestBody == null)
@@ -88,7 +85,7 @@ namespace Todo_CRUD
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
 
-            var (statusCode, isUpdated) = await _todoEntity.UpdateTodoTasks(requestBody);
+            var (statusCode, todoTask, isUpdated) = await _todoEntity.UpdateTodoTasks(requestBody);
             _todoEntity.SaveChanges();
 
             var response = req.CreateResponse(statusCode);
@@ -101,7 +98,7 @@ namespace Todo_CRUD
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Visibility = OpenApiVisibilityType.Important)]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "Task Deleted Successfully")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.BadRequest, contentType: "text/plain", bodyType: typeof(string), Description = "Invalid Details")]
-        public async Task<HttpResponseData> DeleteTodoTasks([HttpTrigger(AuthorizationLevel.Function, "delete")] HttpRequestData req)
+        public async Task<HttpResponseData> DeleteTodoTasks([HttpTrigger(AuthorizationLevel.Anonymous, "delete")] HttpRequestData req)
         {
             string username = req.Query["username"]!;
             if(username == null)

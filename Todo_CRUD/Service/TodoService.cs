@@ -56,16 +56,16 @@ namespace Todo_CRUD.Service
             }
         }
 
-        public async Task<List<string>> GetTodoTasks(string username)
+        public async Task<IEnumerable<Todo>> GetTodoTasks(string username)
         {
             var tasks = await _todoContext.Todos.Where(u => u.Username == username).ToListAsync();
             if(tasks != null)
             {
-                return tasks.Select(task => task.TaskName).ToList(); ; 
+                return tasks;
             }
             else
             {
-                return new List<string>();
+                return [];
             }
         }
 
@@ -74,21 +74,21 @@ namespace Todo_CRUD.Service
             _todoContext.SaveChanges();
         }
 
-        public async Task<(HttpStatusCode statusCode, string)> UpdateTodoTasks(Todo todos)
+        public async Task<(HttpStatusCode statusCode, Todo todoTask, string)> UpdateTodoTasks(Todo todos)
         {
             if(todos == null)
             {
-                return (HttpStatusCode.BadRequest, "No Tasks Found");
+                return (HttpStatusCode.BadRequest, new Todo {}, "No Tasks Found");
             }
             else
             {
                 var task = await _todoContext.Todos.FirstOrDefaultAsync(t => t.TaskName == todos.TaskName);
                 if(task == null)
                 {
-                    return (HttpStatusCode.BadRequest, "No user exist");
+                    return (HttpStatusCode.BadRequest, new Todo { }, "No user exist");
                 }
                 task.IsDone = todos.IsDone;
-                return (HttpStatusCode.OK, "Updated Successfully");
+                return (HttpStatusCode.OK, task, "Updated Successfully");
             }
         }
     }

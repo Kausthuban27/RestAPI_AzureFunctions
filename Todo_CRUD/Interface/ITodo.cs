@@ -8,8 +8,8 @@ namespace Todo_CRUD.Interface
     public interface ITodo
     {
         Task<(HttpStatusCode statusCode, string)> AddTodoTasks(TodoData todos);
-        Task<List<string>> GetTodoTasks(string username);
-        Task<(HttpStatusCode statusCode, string)> UpdateTodoTasks(Todo todos);
+        Task<IEnumerable<Todo>> GetTodoTasks(string username);
+        Task<(HttpStatusCode statusCode, Todo todoTask, string)> UpdateTodoTasks(Todo todos);
         Task<(HttpStatusCode statusCode, string)> DeleteTodoTasks(string username);
         void SaveChanges();
     }
