@@ -17,9 +17,6 @@ public partial class TodoContext : DbContext
 
     public virtual DbSet<Todo> Todos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=tcp:restapi-azure.database.windows.net,1433;Initial Catalog=Todo;Persist Security Info=False;User ID=kausthuban;Password=@Victini03@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         OnModelCreatingPartial(modelBuilder);
